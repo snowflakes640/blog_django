@@ -24,8 +24,12 @@ posts = [
 ]
 
 def home (request):
+    if request.user.is_authenticated:
+        posts = Post.objects.filter(author=request.user)
+    else:
+        posts = Post.objects.none()  # or Post.objects.all() if you want to show all to anonymous users
     context = {
-        "key" : Post.objects.all()
+        "key": posts
     }
     return render(request, "blog_app/home.html", context)
 
